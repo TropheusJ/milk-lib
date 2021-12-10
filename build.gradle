@@ -1,0 +1,102 @@
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyAccessibility
+plugins {
+	id "fabric-loom" version "0.10-SNAPSHOT"
+	id "io.github.juuxel.loom-quiltflower-mini" version "1.+"
+	id "maven-publish"
+}
+
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
+
+// --- versions ---
+group = "io.github.tropheusj"
+archivesBaseName = "modid"
+version = "0.0.1"
+
+// https://fabricmc.net/versions.html
+String minecraft_version = "1.17.1"
+String yarn_mappings = "63"
+String loader_version = "0.12.5"
+String fabric_version = "0.43.1+1.17"
+
+String sodium_version = "0.3.3" // https://modrinth.com/mod/sodium
+String indium_version = "1.0.1" // https://modrinth.com/mod/indium
+String lithium_version = "0.7.5" // https://modrinth.com/mod/lithium
+String phosphor_version = "0.8.0" // https://modrinth.com/mod/phosphor
+String iris_version = "1.1.3" // https://modrinth.com/mod/iris
+String wthit_version = "3.11.2" // https://modrinth.com/mod/wthit
+String modmenu_version = "2.0.14" // https://modrinth.com/mod/modmenu
+// ----------------
+
+repositories {
+	maven { url = "https://api.modrinth.com/maven" }
+	maven { url = "https://maven.bai.lol" }
+	maven { url = "https://maven.terraformersmc.com/releases/" }
+}
+
+dependencies {
+	// dev environment
+	minecraft("com.mojang:minecraft:${minecraft_version}")
+	mappings("net.fabricmc:yarn:${minecraft_version}+build.${yarn_mappings}:v2")
+	modImplementation("net.fabricmc:fabric-loader:${loader_version}")
+	modImplementation("maven.modrinth:lazydfu:0.1.2")
+	modImplementation("maven.modrinth:suggestionproviderfabric:1.0.0")
+	modImplementation("mcp.mobius.waila:wthit:fabric-${wthit_version}")
+	modImplementation("maven.modrinth:sodium:mc${minecraft_version}-${sodium_version}")
+	implementation("org.joml:joml:1.10.2")
+	modImplementation("maven.modrinth:indium:${indium_version}+mc${minecraft_version}")
+	modImplementation("maven.modrinth:lithium:mc${minecraft_version}-${lithium_version}")
+	modImplementation("maven.modrinth:phosphor:mc1.17.x-${phosphor_version}")
+	modImplementation("maven.modrinth:iris:mc${minecraft_version}-${iris_version}")
+	modImplementation("com.terraformersmc:modmenu:${modmenu_version}") { exclude group: "net.fabricmc";
+		exclude group: "net.fabricmc.fabric-api" }
+
+	// dependencies
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach { it.options.release = 16 }
+
+java {
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+		String suffix = System.getenv().PUBLISH_SUFFIX // 'releases' or 'snapshots'
+		if (suffix == null || suffix.isEmpty()) {
+			System.out.println("Failed to publish to maven!")
+			return
+		}
+		maven {
+			url = "https://maven.devos.community/${suffix}/"
+			credentials {
+				username = System.getenv().MAVEN_USER
+				password = System.getenv().MAVEN_PASS
+			}
+			authentication { basic(BasicAuthentication) }
+		}
+	}
+}

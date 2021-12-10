@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "modid",
+  "version": "${version}",
+  "name": "Example Mod",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Tropheus Jay"
+  ],
+  "contact": {
+    "sources": "https://github.com/TropheusJ/fabric-example-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.tropheusj.modid.ExampleMod"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "fabric": ">=0.43.1",
+    "minecraft": ">=1.17.1",
+    "java": ">=16"
+  }
+}
