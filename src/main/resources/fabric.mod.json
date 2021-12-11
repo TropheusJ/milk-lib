@@ -27,8 +27,8 @@
   "accessWidener": "milk.accesswidener",
   "depends": {
     "fabricloader": ">=0.12.11",
-    "fabric": ">=0.43.1",
-    "minecraft": ">=1.17.1",
-    "java": ">=16"
+    "fabric": ">=0.44.0",
+    "minecraft": ">=1.18.1",
+    "java": ">=17"
   }
 }

@@ -5,7 +5,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [ 16 ]
+        java: [ 17 ]
     runs-on: ubuntu-latest
     env:
       PUBLISH_SUFFIX: snapshots
