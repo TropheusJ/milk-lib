@@ -42,16 +42,16 @@ dependencies {
 	minecraft("com.mojang:minecraft:${minecraft_version}")
 	mappings("net.fabricmc:yarn:${minecraft_version}+build.${yarn_mappings}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${loader_version}")
-	modImplementation("maven.modrinth:lazydfu:0.1.2")
-//	modImplementation("maven.modrinth:suggestionproviderfabric:1.0.0")
-//	modImplementation("mcp.mobius.waila:wthit:fabric-${wthit_version}")
-//	modImplementation("maven.modrinth:sodium:mc${minecraft_version}-${sodium_version}")
-//	implementation("org.joml:joml:1.10.2")
-//	modImplementation("maven.modrinth:indium:${indium_version}+mc${minecraft_version}")
-//	modImplementation("maven.modrinth:lithium:mc${minecraft_version}-${lithium_version}")
-//	modImplementation("maven.modrinth:phosphor:mc1.17.x-${phosphor_version}")
-//	modImplementation("maven.modrinth:iris:mc${minecraft_version}-${iris_version}")
-//	modImplementation("com.terraformersmc:modmenu:${modmenu_version}") { exclude group: "net.fabricmc" exclude group: "net.fabricmc.fabric-api" }
+	modCompileOnly("maven.modrinth:lazydfu:0.1.2")
+//	modCompileOnly("maven.modrinth:suggestionproviderfabric:1.0.0")
+//	modCompileOnly("mcp.mobius.waila:wthit:fabric-${wthit_version}")
+//	modCompileOnly("maven.modrinth:sodium:mc${minecraft_version}-${sodium_version}")
+//	compileOnly("org.joml:joml:1.10.2")
+//	modCompileOnly("maven.modrinth:indium:${indium_version}+mc${minecraft_version}")
+//	modCompileOnly("maven.modrinth:lithium:mc${minecraft_version}-${lithium_version}")
+//	modCompileOnly("maven.modrinth:phosphor:mc1.17.x-${phosphor_version}")
+//	modCompileOnly("maven.modrinth:iris:mc${minecraft_version}-${iris_version}")
+//	modCompileOnly("com.terraformersmc:modmenu:${modmenu_version}") { exclude group: "net.fabricmc" exclude group: "net.fabricmc.fabric-api" }
 
 	// dependencies
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
