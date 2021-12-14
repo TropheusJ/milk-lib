@@ -73,9 +73,6 @@ public class Milk implements ModInitializer {
 		FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
 				new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
 		);
-
-		enableAllMilkBottles();
-		enableCauldron();
 	}
 
 	public static void enableCauldron() {
