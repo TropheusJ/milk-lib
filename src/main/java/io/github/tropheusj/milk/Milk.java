@@ -59,6 +59,7 @@ public class Milk implements ModInitializer {
 	public static boolean MILK_BOTTLE_CAULDRON_BEHAVIOR = false;
 
 	public static boolean FLUID_ENABLED = false;
+	public static boolean MILK_PLACING_ENABLED = false;
 
 	public static EntityType<MilkAreaEffectCloudEntity> MILK_EFFECT_CLOUD_ENTITY_TYPE = FabricEntityTypeBuilder.<MilkAreaEffectCloudEntity>create()
 			.fireImmune()
@@ -74,7 +75,11 @@ public class Milk implements ModInitializer {
 		Registry.register(Registry.BLOCK, id("milk_fluid_block"), MILK_FLUID_BLOCK);
 	}
 
-	public static void enableMilkFluids() {
+	public static void enableMilkPlacing() {
+		MILK_PLACING_ENABLED = true;
+	}
+
+	public static void enableMilkFluid() {
 		if (!FLUID_ENABLED) {
 			FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
 					new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)

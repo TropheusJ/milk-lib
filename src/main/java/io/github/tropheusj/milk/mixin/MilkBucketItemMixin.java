@@ -4,12 +4,9 @@ import io.github.tropheusj.milk.Milk;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidDrainable;
 import net.minecraft.block.FluidFillable;
 import net.minecraft.block.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FlowableFluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,10 +16,8 @@ import net.minecraft.item.MilkBucketItem;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
@@ -55,7 +50,7 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
 		BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE);
-		if (!Milk.FLUID_ENABLED || (blockHitResult.getType() == HitResult.Type.MISS || user.isSneaking())) {
+		if (!Milk.FLUID_ENABLED || !Milk.MILK_PLACING_ENABLED || (blockHitResult.getType() == HitResult.Type.MISS || user.isSneaking())) {
 			return ItemUsage.consumeHeldItem(world, user, hand);
 		} else if (blockHitResult.getType() != HitResult.Type.BLOCK) {
 			return TypedActionResult.pass(itemStack);
