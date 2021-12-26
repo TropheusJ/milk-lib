@@ -12,6 +12,6 @@ repositories {
 ```
 ```groovy
 dependencies {
-    modImplementation(include("io.github.tropheusj:milk-lib:0.1.1"))
+    modImplementation(include("io.github.tropheusj:milk-lib:0.1.3"))
 }
 ```
