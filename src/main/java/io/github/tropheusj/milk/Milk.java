@@ -1,14 +1,21 @@
 package io.github.tropheusj.milk;
 
+import static net.minecraft.item.Items.BUCKET;
+import static net.minecraft.item.Items.DRAGON_BREATH;
+import static net.minecraft.item.Items.GLASS_BOTTLE;
+import static net.minecraft.item.Items.GUNPOWDER;
+import static net.minecraft.item.Items.MILK_BUCKET;
+
+import io.github.tropheusj.milk.mixin.BrewingRecipeRegistryAccessor;
 import io.github.tropheusj.milk.potion.MilkAreaEffectCloudEntity;
 import io.github.tropheusj.milk.potion.bottle.LingeringMilkBottle;
 import io.github.tropheusj.milk.potion.bottle.MilkBottle;
 import io.github.tropheusj.milk.potion.bottle.SplashMilkBottle;
-import io.github.tropheusj.milk.mixin.BrewingRecipeRegistryAccessor;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.tag.TagFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.CauldronFluidContent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -25,17 +32,13 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import static net.minecraft.item.Items.BUCKET;
-import static net.minecraft.item.Items.DRAGON_BREATH;
-import static net.minecraft.item.Items.GLASS_BOTTLE;
-import static net.minecraft.item.Items.GUNPOWDER;
-import static net.minecraft.item.Items.MILK_BUCKET;
 
 @SuppressWarnings("UnstableApiUsage")
 public class Milk implements ModInitializer {
@@ -43,6 +46,7 @@ public class Milk implements ModInitializer {
 	public static final FlowableFluid STILL_MILK = new MilkFluid.Still();
 	public static final FlowableFluid FLOWING_MILK = new MilkFluid.Flowing();
 	public static final Block MILK_FLUID_BLOCK = new MilkFluidBlock(STILL_MILK, FabricBlockSettings.copyOf(Blocks.WATER).mapColor(MapColor.WHITE));
+	public static final Tag<Fluid> MILK_TAG = TagFactory.FLUID.create(new Identifier("c", "milk"));
 
 	public static final Item MILK_BOTTLE = new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING));
 	public static boolean MILK_BOTTLE_ENABLED = false;

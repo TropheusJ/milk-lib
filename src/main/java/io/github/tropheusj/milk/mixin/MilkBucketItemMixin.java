@@ -1,5 +1,11 @@
 package io.github.tropheusj.milk.mixin;
 
+import static net.minecraft.item.BucketItem.getEmptiedStack;
+
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
 import io.github.tropheusj.milk.Milk;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
@@ -12,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.MilkBucketItem;
-
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -24,17 +29,10 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.event.GameEvent;
-
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-
-import static net.minecraft.item.BucketItem.getEmptiedStack;
 
 @Mixin(MilkBucketItem.class)
 public abstract class MilkBucketItemMixin extends Item implements FluidModificationItem {

@@ -2,12 +2,6 @@ package io.github.tropheusj.milk.mixin;
 
 import java.util.List;
 
-import io.github.tropheusj.milk.Milk;
-
-import io.github.tropheusj.milk.potion.MilkAreaEffectCloudEntity;
-import io.github.tropheusj.milk.potion.bottle.LingeringMilkBottle;
-import io.github.tropheusj.milk.potion.bottle.PotionItemEntityExtensions;
-
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,6 +10,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.tropheusj.milk.Milk;
+import io.github.tropheusj.milk.potion.MilkAreaEffectCloudEntity;
+import io.github.tropheusj.milk.potion.bottle.LingeringMilkBottle;
+import io.github.tropheusj.milk.potion.bottle.PotionItemEntityExtensions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingItemEntity;

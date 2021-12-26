@@ -1,10 +1,19 @@
 package io.github.tropheusj.milk;
 
+import static io.github.tropheusj.milk.Milk.CAULDRON_ENABLED;
+import static io.github.tropheusj.milk.Milk.FLOWING_MILK;
+import static io.github.tropheusj.milk.Milk.MILK_CAULDRON;
+import static io.github.tropheusj.milk.Milk.MILK_FLUID_BLOCK;
+import static io.github.tropheusj.milk.Milk.STILL_MILK;
+import static net.minecraft.item.Items.MILK_BUCKET;
+
+import java.util.Optional;
+
+import org.jetbrains.annotations.Nullable;
+
 import io.github.tropheusj.dripstone_fluid_lib.DripstoneInteractingFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-
-import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
@@ -16,21 +25,11 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
-
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
-
-import static io.github.tropheusj.milk.Milk.*;
-import static net.minecraft.item.Items.CAULDRON;
-import static net.minecraft.item.Items.MILK_BUCKET;
 
 public abstract class MilkFluid extends FlowableFluid implements DripstoneInteractingFluid {
 

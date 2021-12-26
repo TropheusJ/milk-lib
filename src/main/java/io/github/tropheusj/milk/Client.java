@@ -1,5 +1,11 @@
 package io.github.tropheusj.milk;
 
+import static io.github.tropheusj.milk.Milk.FLOWING_MILK;
+import static io.github.tropheusj.milk.Milk.STILL_MILK;
+import static io.github.tropheusj.milk.Milk.id;
+
+import java.util.function.Function;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
@@ -19,10 +25,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockRenderView;
-
-import java.util.function.Function;
-
-import static io.github.tropheusj.milk.Milk.*;
 
 public class Client implements ClientModInitializer {
 	public static void setupFluidRendering(final Fluid still, final Fluid flowing, final Identifier textureFluidId, final int color) {

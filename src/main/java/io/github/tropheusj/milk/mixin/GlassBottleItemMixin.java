@@ -1,16 +1,14 @@
 package io.github.tropheusj.milk.mixin;
 
-import io.github.tropheusj.milk.Milk;
-
-import net.minecraft.fluid.FluidState;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.tropheusj.milk.Milk;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
