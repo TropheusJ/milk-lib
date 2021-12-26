@@ -17,7 +17,7 @@ import net.minecraft.tag.Tag;
 public abstract class EntityMixin {
 	@Inject(method = "updateMovementInFluid", at = @At("HEAD"))
 	public void updateMovementInFluid(Tag<Fluid> tag, double d, CallbackInfoReturnable<Boolean> cir) {
-		if ((Object) this instanceof PlayerEntity player) {
+		if ((Object) this instanceof PlayerEntity player && Milk.FLUID_ENABLED) {
 			FluidState fluidState = player.world.getFluidState(player.getBlockPos());
 			if (fluidState.getFluid() == Milk.STILL_MILK || fluidState.getFluid() == Milk.FLOWING_MILK) {
 				if (player.getStatusEffects().size() > 0) {

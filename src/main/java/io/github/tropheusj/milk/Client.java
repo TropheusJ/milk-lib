@@ -76,7 +76,9 @@ public class Client implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		setupFluidRendering(STILL_MILK, FLOWING_MILK, id("milk"), 0xFFFFFF);
-		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), STILL_MILK, FLOWING_MILK);
+		if (FLUID_ENABLED) {
+			setupFluidRendering(STILL_MILK, FLOWING_MILK, id("milk"), 0xFFFFFF);
+			BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), STILL_MILK, FLOWING_MILK);
+		}
 	}
 }

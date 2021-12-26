@@ -38,7 +38,7 @@ import static net.minecraft.item.Items.GUNPOWDER;
 import static net.minecraft.item.Items.MILK_BUCKET;
 
 @SuppressWarnings("UnstableApiUsage")
-public class Milk implements ModInitializer {
+public class Milk {
 	public static final String MOD_ID = "milk";
 	public static final FlowableFluid STILL_MILK = new MilkFluid.Still();
 	public static final FlowableFluid FLOWING_MILK = new MilkFluid.Flowing();
@@ -58,6 +58,8 @@ public class Milk implements ModInitializer {
 
 	public static boolean MILK_BOTTLE_CAULDRON_BEHAVIOR = false;
 
+	public static boolean FLUID_ENABLED = false;
+
 	public static EntityType<MilkAreaEffectCloudEntity> MILK_EFFECT_CLOUD_ENTITY_TYPE = FabricEntityTypeBuilder.<MilkAreaEffectCloudEntity>create()
 			.fireImmune()
 			.dimensions(EntityDimensions.fixed(6.0F, 0.5F))
@@ -65,21 +67,32 @@ public class Milk implements ModInitializer {
 			.trackedUpdateRate(Integer.MAX_VALUE)
 			.build();
 
-	@Override
-	public void onInitialize() {
-		Registry.register(Registry.FLUID, id("still_milk"), STILL_MILK);
-		Registry.register(Registry.FLUID, id("flowing_milk"), FLOWING_MILK);
-		Registry.register(Registry.BLOCK, id("milk_fluid_block"), MILK_FLUID_BLOCK);
-		FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
-				new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
-		);
+	public static void enableMilkFluids() {
+		if (!FLUID_ENABLED) {
+			Registry.register(Registry.FLUID, id("still_milk"), STILL_MILK);
+			Registry.register(Registry.FLUID, id("flowing_milk"), FLOWING_MILK);
+			Registry.register(Registry.BLOCK, id("milk_fluid_block"), MILK_FLUID_BLOCK);
+			FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
+					new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
+			);
+			if (CAULDRON_ENABLED) {
+				CauldronFluidContent.registerCauldron(MILK_CAULDRON, STILL_MILK, FluidConstants.BOTTLE, LeveledCauldronBlock.LEVEL);
+			}
+			if (MILK_BOTTLE_ENABLED) {
+				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
+						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
+				);
+			}
+		}
 	}
 
 	public static void enableCauldron() {
 		if (!CAULDRON_ENABLED) {
 			Registry.register(Registry.BLOCK, id("milk_cauldron"), MILK_CAULDRON);
 			CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BUCKET, MilkCauldron.FILL_FROM_BUCKET);
-			CauldronFluidContent.registerCauldron(MILK_CAULDRON, STILL_MILK, FluidConstants.BOTTLE, LeveledCauldronBlock.LEVEL);
+			if (FLUID_ENABLED) {
+				CauldronFluidContent.registerCauldron(MILK_CAULDRON, STILL_MILK, FluidConstants.BOTTLE, LeveledCauldronBlock.LEVEL);
+			}
 			if (MILK_BOTTLE_ENABLED && !MILK_BOTTLE_CAULDRON_BEHAVIOR) {
 				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
@@ -94,9 +107,11 @@ public class Milk implements ModInitializer {
 		if (!MILK_BOTTLE_ENABLED) {
 			Registry.register(Registry.ITEM, id("milk_bottle"), MILK_BOTTLE);
 			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(MILK_BOTTLE);
-			FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
-					new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
-			);
+			if (FLUID_ENABLED) {
+				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
+						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
+				);
+			}
 			if (CAULDRON_ENABLED && !MILK_BOTTLE_CAULDRON_BEHAVIOR) {
 				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
