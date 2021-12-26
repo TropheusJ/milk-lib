@@ -12,13 +12,13 @@ targetCompatibility = JavaVersion.VERSION_17
 // --- versions ---
 group = "io.github.tropheusj"
 archivesBaseName = "milk"
-version = "0.1.2"
+version = "0.1.3"
 
 // https://fabricmc.net/versions.html
 String minecraft_version = "1.18.1"
 String yarn_mappings = "2"
-String loader_version = "0.12.11"
-String fabric_version = "0.44.0+1.18"
+String loader_version = "0.12.12"
+String fabric_version = "0.45.0+1.18"
 
 String dripstone_fluid_lib_version = "1.1.1"
 String sodium_version = "0.3.3" // https://modrinth.com/mod/sodium

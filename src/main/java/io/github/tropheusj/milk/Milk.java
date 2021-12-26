@@ -44,17 +44,17 @@ public class Milk {
 	public static final FlowableFluid FLOWING_MILK = new MilkFluid.Flowing();
 	public static final Block MILK_FLUID_BLOCK = new MilkFluidBlock(STILL_MILK, FabricBlockSettings.copyOf(Blocks.WATER).mapColor(MapColor.WHITE));
 
-	public static Block MILK_CAULDRON = new MilkCauldron(FabricBlockSettings.copyOf(Blocks.CAULDRON));
-	public static boolean CAULDRON_ENABLED = false;
-
-	public static Item MILK_BOTTLE = new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING));
+	public static final Item MILK_BOTTLE = new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING));
 	public static boolean MILK_BOTTLE_ENABLED = false;
 
-	public static Item SPLASH_MILK_BOTTLE = new SplashMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING));
+	public static final Item SPLASH_MILK_BOTTLE = new SplashMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING));
 	public static boolean SPLASH_MILK_BOTTLE_ENABLED = false;
 
-	public static Item LINGERING_MILK_BOTTLE = new LingeringMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING));
+	public static final Item LINGERING_MILK_BOTTLE = new LingeringMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING));
 	public static boolean LINGERING_MILK_BOTTLE_ENABLED = false;
+
+	public static final Block MILK_CAULDRON = new MilkCauldron(FabricBlockSettings.copyOf(Blocks.CAULDRON));
+	public static boolean CAULDRON_ENABLED = false;
 
 	public static boolean MILK_BOTTLE_CAULDRON_BEHAVIOR = false;
 
