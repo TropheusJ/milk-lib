@@ -38,7 +38,7 @@ import static net.minecraft.item.Items.GUNPOWDER;
 import static net.minecraft.item.Items.MILK_BUCKET;
 
 @SuppressWarnings("UnstableApiUsage")
-public class Milk {
+public class Milk implements ModInitializer {
 	public static final String MOD_ID = "milk";
 	public static final FlowableFluid STILL_MILK = new MilkFluid.Still();
 	public static final FlowableFluid FLOWING_MILK = new MilkFluid.Flowing();
@@ -67,11 +67,15 @@ public class Milk {
 			.trackedUpdateRate(Integer.MAX_VALUE)
 			.build();
 
+	@Override
+	public void onInitialize() {
+		Registry.register(Registry.FLUID, id("still_milk"), STILL_MILK);
+		Registry.register(Registry.FLUID, id("flowing_milk"), FLOWING_MILK);
+		Registry.register(Registry.BLOCK, id("milk_fluid_block"), MILK_FLUID_BLOCK);
+	}
+
 	public static void enableMilkFluids() {
 		if (!FLUID_ENABLED) {
-			Registry.register(Registry.FLUID, id("still_milk"), STILL_MILK);
-			Registry.register(Registry.FLUID, id("flowing_milk"), FLOWING_MILK);
-			Registry.register(Registry.BLOCK, id("milk_fluid_block"), MILK_FLUID_BLOCK);
 			FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
 					new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
 			);
