@@ -83,6 +83,7 @@ public class Milk {
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
 			}
+			FLUID_ENABLED = true;
 		}
 	}
 
