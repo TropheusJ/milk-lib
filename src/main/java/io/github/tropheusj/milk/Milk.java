@@ -99,6 +99,9 @@ public class Milk implements ModInitializer {
 				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
+				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
+						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BOTTLE), STILL_MILK, FluidConstants.BOTTLE)
+				);
 			}
 			FLUID_ENABLED = true;
 		}
@@ -129,6 +132,9 @@ public class Milk implements ModInitializer {
 				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
+				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
+						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BOTTLE), STILL_MILK, FluidConstants.BOTTLE)
+				);
 			}
 			if (CAULDRON_ENABLED && !MILK_BOTTLE_CAULDRON_BEHAVIOR) {
 				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
@@ -147,6 +153,11 @@ public class Milk implements ModInitializer {
 			if (MILK_BOTTLE_ENABLED) {
 				BrewingRecipeRegistryAccessor.invokeRegisterItemRecipe(MILK_BOTTLE, GUNPOWDER, SPLASH_MILK_BOTTLE);
 			}
+			if (FLUID_ENABLED) {
+				FluidStorage.combinedItemApiProvider(SPLASH_MILK_BOTTLE).register(context ->
+						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
+				);
+			}
 			SPLASH_MILK_BOTTLE_ENABLED = true;
 		}
 	}
@@ -158,6 +169,11 @@ public class Milk implements ModInitializer {
 			Registry.register(Registry.ENTITY_TYPE, id("milk_area_effect_cloud"), MILK_EFFECT_CLOUD_ENTITY_TYPE);
 			if (SPLASH_MILK_BOTTLE_ENABLED) {
 				BrewingRecipeRegistryAccessor.invokeRegisterItemRecipe(SPLASH_MILK_BOTTLE, DRAGON_BREATH, LINGERING_MILK_BOTTLE);
+			}
+			if (FLUID_ENABLED) {
+				FluidStorage.combinedItemApiProvider(LINGERING_MILK_BOTTLE).register(context ->
+						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
+				);
 			}
 			LINGERING_MILK_BOTTLE_ENABLED = true;
 		}
