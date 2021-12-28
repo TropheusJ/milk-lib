@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.CauldronFluidContent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
@@ -87,6 +88,9 @@ public class Milk implements ModInitializer {
 		if (!FLUID_ENABLED) {
 			FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
 					new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
+			);
+			FluidStorage.combinedItemApiProvider(BUCKET).register(context ->
+					new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BUCKET), STILL_MILK, FluidConstants.BUCKET)
 			);
 			if (CAULDRON_ENABLED) {
 				CauldronFluidContent.registerCauldron(MILK_CAULDRON, STILL_MILK, FluidConstants.BOTTLE, LeveledCauldronBlock.LEVEL);
