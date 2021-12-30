@@ -2,12 +2,15 @@ package io.github.tropheusj.milk;
 
 import static io.github.tropheusj.milk.Milk.CAULDRON_ENABLED;
 import static io.github.tropheusj.milk.Milk.FLOWING_MILK;
+import static io.github.tropheusj.milk.Milk.FLUID_ENABLED;
 import static io.github.tropheusj.milk.Milk.MILK_CAULDRON;
 import static io.github.tropheusj.milk.Milk.MILK_FLUID_BLOCK;
 import static io.github.tropheusj.milk.Milk.STILL_MILK;
 import static net.minecraft.item.Items.MILK_BUCKET;
 
 import java.util.Optional;
+
+import net.minecraft.block.Blocks;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -91,7 +94,8 @@ public abstract class MilkFluid extends FlowableFluid implements DripstoneIntera
 
 	@Override
 	protected BlockState toBlockState(FluidState fluidState) {
-		return MILK_FLUID_BLOCK.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
+		if (FLUID_ENABLED) return MILK_FLUID_BLOCK.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
+		return Blocks.AIR.getDefaultState();
 	}
 
 	@Override
