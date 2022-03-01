@@ -134,9 +134,14 @@ public class Milk {
 			}
 			// cauldron interactions
 			if (MILK_BOTTLE != null && !CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.containsKey(MILK_BOTTLE)) {
-				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
-				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
-				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, MilkCauldron.EMPTY_TO_BOTTLE);
+				CauldronBehavior fillFromMilkBottle = MilkCauldron.addInputToCauldronExchange(
+						Milk.MILK_BOTTLE.getDefaultStack(), Items.GLASS_BOTTLE.getDefaultStack(), true);
+				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, fillFromMilkBottle);
+				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, fillFromMilkBottle);
+
+				CauldronBehavior emptyToBottle = MilkCauldron.addOutputToItemExchange(
+						Items.GLASS_BOTTLE.getDefaultStack(), Milk.MILK_BOTTLE.getDefaultStack(), true);
+				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, emptyToBottle);
 			}
 		}
 	}
@@ -162,9 +167,14 @@ public class Milk {
 			}
 			// cauldron interactions
 			if (MILK_CAULDRON != null && !CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.containsKey(MILK_BOTTLE)) {
-				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
-				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
-				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, MilkCauldron.EMPTY_TO_BOTTLE);
+				CauldronBehavior fillFromMilkBottle = MilkCauldron.addInputToCauldronExchange(
+						Milk.MILK_BOTTLE.getDefaultStack(), Items.GLASS_BOTTLE.getDefaultStack(), true);
+				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, fillFromMilkBottle);
+				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, fillFromMilkBottle);
+
+				CauldronBehavior emptyToBottle = MilkCauldron.addOutputToItemExchange(
+						Items.GLASS_BOTTLE.getDefaultStack(), Milk.MILK_BOTTLE.getDefaultStack(), true);
+				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, emptyToBottle);
 			}
 		}
 	}

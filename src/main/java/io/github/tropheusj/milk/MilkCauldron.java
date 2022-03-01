@@ -33,10 +33,10 @@ import net.minecraft.world.event.GameEvent;
 
 public class MilkCauldron extends LeveledCauldronBlock {
 	static final Map<Item, CauldronBehavior> MILK_CAULDRON_BEHAVIOR = CauldronBehavior.createMap();
-	static final CauldronBehavior FILL_FROM_BUCKET = (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(world, pos, player, hand, stack, Milk.MILK_CAULDRON.getDefaultState().with(LEVEL, 3), SoundEvents.ITEM_BUCKET_EMPTY);
-	static final CauldronBehavior EMPTY_TO_BUCKET = (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(state, world, pos, player, hand, stack, new ItemStack(Items.MILK_BUCKET), statex -> statex.get(LEVEL) == 3, SoundEvents.ITEM_BUCKET_FILL);
-	static final CauldronBehavior FILL_FROM_BOTTLE = addInputToCauldronExchange(Milk.MILK_BOTTLE.getDefaultStack(), Items.GLASS_BOTTLE.getDefaultStack(), true);
-	static final CauldronBehavior EMPTY_TO_BOTTLE = addOutputToItemExchange(Items.GLASS_BOTTLE.getDefaultStack(), Milk.MILK_BOTTLE.getDefaultStack(), true);
+	static final CauldronBehavior FILL_FROM_BUCKET = (state, world, pos, player, hand, stack) ->
+			CauldronBehavior.fillCauldron(world, pos, player, hand, stack, Milk.MILK_CAULDRON.getDefaultState().with(LEVEL, 3), SoundEvents.ITEM_BUCKET_EMPTY);
+	static final CauldronBehavior EMPTY_TO_BUCKET = (state, world, pos, player, hand, stack) ->
+			CauldronBehavior.emptyCauldron(state, world, pos, player, hand, stack, new ItemStack(Items.MILK_BUCKET), statex -> statex.get(LEVEL) == 3, SoundEvents.ITEM_BUCKET_FILL);
 	static final CauldronBehavior MILKIFY_DYEABLE_ITEM = (state, world, pos, player, hand, stack) -> {
 		Item item = stack.getItem();
 		if ((item instanceof DyeableItem dyeableItem)) {
