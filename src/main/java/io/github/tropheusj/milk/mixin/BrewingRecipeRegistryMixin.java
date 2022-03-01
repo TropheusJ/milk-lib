@@ -26,7 +26,7 @@ public abstract class BrewingRecipeRegistryMixin {
 
 	@Inject(at = @At("HEAD"), method = "registerPotionType", cancellable = true)
 	private static void registerPotionType(Item item, CallbackInfo ci) {
-		if (isMilkBottle(item)) {
+		if (Milk.isMilkBottle(item)) {
 			POTION_TYPES.add(Ingredient.ofItems(item));
 			ci.cancel();
 		}
@@ -34,13 +34,9 @@ public abstract class BrewingRecipeRegistryMixin {
 
 	@Inject(at = @At("HEAD"), method = "registerItemRecipe", cancellable = true)
 	private static void registerItemRecipe(Item input, Item ingredient, Item output, CallbackInfo ci) {
-		if (isMilkBottle(input) && isMilkBottle(output)) {
+		if (Milk.isMilkBottle(input) && Milk.isMilkBottle(output)) {
 			ITEM_RECIPES.add(new BrewingRecipeRegistry.Recipe<>(input, Ingredient.ofItems(ingredient), output));
 			ci.cancel();
 		}
-	}
-
-	private static boolean isMilkBottle(Item item) {
-		return item == Milk.MILK_BOTTLE || item == Milk.SPLASH_MILK_BOTTLE || item == Milk.LINGERING_MILK_BOTTLE;
 	}
 }

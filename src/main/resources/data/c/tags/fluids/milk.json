@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "milk:flowing_milk",
-    "milk:still_milk"
+    {
+      "id": "milk:flowing_milk",
+      "required": false
+    },
+    {
+      "id": "milk:still_milk",
+      "required": false
+    }
   ]
 }

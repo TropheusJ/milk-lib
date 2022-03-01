@@ -48,7 +48,7 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
 		BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE);
-		if (!Milk.FLUID_ENABLED || !Milk.MILK_PLACING_ENABLED || (blockHitResult.getType() == HitResult.Type.MISS || user.isSneaking())) {
+		if (Milk.STILL_MILK != null || !Milk.MILK_PLACING_ENABLED || (blockHitResult.getType() == HitResult.Type.MISS || user.isSneaking())) {
 			return ItemUsage.consumeHeldItem(world, user, hand);
 		} else if (blockHitResult.getType() != HitResult.Type.BLOCK) {
 			return TypedActionResult.pass(itemStack);

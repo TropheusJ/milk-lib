@@ -1,8 +1,6 @@
 package io.github.tropheusj.milk;
 
-import static io.github.tropheusj.milk.Milk.CAULDRON_ENABLED;
 import static io.github.tropheusj.milk.Milk.FLOWING_MILK;
-import static io.github.tropheusj.milk.Milk.FLUID_ENABLED;
 import static io.github.tropheusj.milk.Milk.MILK_CAULDRON;
 import static io.github.tropheusj.milk.Milk.MILK_FLUID_BLOCK;
 import static io.github.tropheusj.milk.Milk.STILL_MILK;
@@ -94,8 +92,7 @@ public abstract class MilkFluid extends FlowableFluid implements DripstoneIntera
 
 	@Override
 	protected BlockState toBlockState(FluidState fluidState) {
-		if (FLUID_ENABLED) return MILK_FLUID_BLOCK.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
-		return Blocks.AIR.getDefaultState();
+		return MILK_FLUID_BLOCK.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
 	}
 
 	@Override
@@ -120,7 +117,7 @@ public abstract class MilkFluid extends FlowableFluid implements DripstoneIntera
 
 	@Override
 	public @Nullable BlockState getCauldronBlockState(BlockState state, World world, BlockPos cauldronPos) {
-		return CAULDRON_ENABLED ? MILK_CAULDRON.getDefaultState() : null;
+		return MILK_CAULDRON != null ? MILK_CAULDRON.getDefaultState() : null;
 	}
 
 	@Override

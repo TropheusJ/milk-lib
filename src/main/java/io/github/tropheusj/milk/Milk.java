@@ -15,7 +15,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.CauldronFluidContent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -34,68 +33,82 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 @SuppressWarnings("UnstableApiUsage")
-public class Milk implements ModInitializer {
+public class Milk {
 	public static final String MOD_ID = "milk";
-	public static final FlowableFluid STILL_MILK = new MilkFluid.Still();
-	public static final FlowableFluid FLOWING_MILK = new MilkFluid.Flowing();
-	public static final Block MILK_FLUID_BLOCK = new MilkFluidBlock(STILL_MILK, FabricBlockSettings.copyOf(Blocks.WATER).mapColor(MapColor.WHITE));
-	public static final Tag<Fluid> MILK_TAG = TagFactory.FLUID.create(new Identifier("c", "milk"));
+	// fluids - if any are non-null, all are non-null.
+	public static FlowableFluid STILL_MILK = null;
+	public static FlowableFluid FLOWING_MILK = null;
+	public static Block MILK_FLUID_BLOCK = null;
 
-	public static final Item MILK_BOTTLE = new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING));
-	public static boolean MILK_BOTTLE_ENABLED = false;
+	// bottles - may be enabled individually.
+	public static Item MILK_BOTTLE = null;
+	public static Item SPLASH_MILK_BOTTLE = null;
+	public static Item LINGERING_MILK_BOTTLE = null;
 
-	public static final Item SPLASH_MILK_BOTTLE = new SplashMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING));
-	public static boolean SPLASH_MILK_BOTTLE_ENABLED = false;
+	// cauldron.
+	public static Block MILK_CAULDRON = null;
 
-	public static final Item LINGERING_MILK_BOTTLE = new LingeringMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING));
-	public static boolean LINGERING_MILK_BOTTLE_ENABLED = false;
-
-	public static final Block MILK_CAULDRON = new MilkCauldron(FabricBlockSettings.copyOf(Blocks.CAULDRON));
-	public static boolean CAULDRON_ENABLED = false;
-
-	public static boolean MILK_BOTTLE_CAULDRON_BEHAVIOR = false;
-
-	public static boolean FLUID_ENABLED = false;
+	// if true, milk can be placed from buckets.
 	public static boolean MILK_PLACING_ENABLED = false;
 
-	public static EntityType<MilkAreaEffectCloudEntity> MILK_EFFECT_CLOUD_ENTITY_TYPE = FabricEntityTypeBuilder.<MilkAreaEffectCloudEntity>create()
-			.fireImmune()
-			.dimensions(EntityDimensions.fixed(6.0F, 0.5F))
-			.trackRangeChunks(10)
-			.trackedUpdateRate(Integer.MAX_VALUE)
-			.build();
+	public static EntityType<MilkAreaEffectCloudEntity> MILK_EFFECT_CLOUD_ENTITY_TYPE = null;
 
-	@Override
-	public void onInitialize() {
-		Registry.register(Registry.FLUID, id("still_milk"), STILL_MILK);
-		Registry.register(Registry.FLUID, id("flowing_milk"), FLOWING_MILK);
-		Registry.register(Registry.BLOCK, id("milk_fluid_block"), MILK_FLUID_BLOCK);
-	}
+	// tags.
+	// all milk fluids.
+	public static final TagKey<Fluid> MILK_FLUID_TAG = TagKey.of(Registry.FLUID_KEY, new Identifier("c", "milk"));
+	// all milk bottles.
+	public static final TagKey<Item> MILK_BOTTLE_TAG = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "milk_bottles"));
+	// all milk buckets.
+	public static final TagKey<Item> MILK_BUCKET_TAG = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "milk_buckets"));
 
 	public static void enableMilkPlacing() {
+		if (STILL_MILK == null) {
+			throw new RuntimeException("to enable milk placing, you need to enable milk with enableMilkFluid()!");
+		}
 		MILK_PLACING_ENABLED = true;
 	}
 
 	public static void enableMilkFluid() {
-		if (!FLUID_ENABLED) {
+		if (STILL_MILK == null) {
+			// register
+			STILL_MILK = Registry.register(
+					Registry.FLUID,
+					id("still_milk"),
+					new MilkFluid.Still()
+			);
+			FLOWING_MILK = Registry.register(
+					Registry.FLUID,
+					id("flowing_milk"),
+					new MilkFluid.Flowing()
+			);
+			MILK_FLUID_BLOCK = Registry.register(
+					Registry.BLOCK,
+					id("milk_fluid_block"),
+					new MilkFluidBlock(STILL_MILK, FabricBlockSettings.copyOf(Blocks.WATER).mapColor(MapColor.WHITE))
+			);
+
+			// transfer
 			FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
 					new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
 			);
 			FluidStorage.combinedItemApiProvider(BUCKET).register(context ->
 					new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BUCKET), STILL_MILK, FluidConstants.BUCKET)
 			);
-			if (CAULDRON_ENABLED) {
+
+			// extras
+			if (MILK_CAULDRON != null) {
 				CauldronFluidContent.registerCauldron(MILK_CAULDRON, STILL_MILK, FluidConstants.BOTTLE, LeveledCauldronBlock.LEVEL);
 			}
-			if (MILK_BOTTLE_ENABLED) {
+			if (MILK_BOTTLE != null) {
 				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
@@ -103,32 +116,43 @@ public class Milk implements ModInitializer {
 						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BOTTLE), STILL_MILK, FluidConstants.BOTTLE)
 				);
 			}
-			FLUID_ENABLED = true;
 		}
 	}
 
 	public static void enableCauldron() {
-		if (!CAULDRON_ENABLED) {
-			Registry.register(Registry.BLOCK, id("milk_cauldron"), MILK_CAULDRON);
+		if (MILK_CAULDRON == null) {
+			// register
+			MILK_CAULDRON = Registry.register(
+					Registry.BLOCK,
+					id("milk_cauldron"),
+					new MilkCauldron(FabricBlockSettings.copyOf(Blocks.CAULDRON))
+			);
 			CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BUCKET, MilkCauldron.FILL_FROM_BUCKET);
-			if (FLUID_ENABLED) {
+			// transfer
+			if (STILL_MILK != null) {
 				CauldronFluidContent.registerCauldron(MILK_CAULDRON, STILL_MILK, FluidConstants.BOTTLE, LeveledCauldronBlock.LEVEL);
 			}
-			if (MILK_BOTTLE_ENABLED && !MILK_BOTTLE_CAULDRON_BEHAVIOR) {
+			// cauldron interactions
+			if (MILK_BOTTLE != null && !CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.containsKey(MILK_BOTTLE)) {
 				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, MilkCauldron.EMPTY_TO_BOTTLE);
-				MILK_BOTTLE_CAULDRON_BEHAVIOR = true;
 			}
 		}
-		CAULDRON_ENABLED = true;
 	}
 
 	public static void enableMilkBottle() {
-		if (!MILK_BOTTLE_ENABLED) {
-			Registry.register(Registry.ITEM, id("milk_bottle"), MILK_BOTTLE);
+		if (MILK_BOTTLE == null) {
+			// register
+			MILK_BOTTLE = Registry.register(
+					Registry.ITEM,
+					id("milk_bottle"),
+					new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING))
+			);
+			// potions
 			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(MILK_BOTTLE);
-			if (FLUID_ENABLED) {
+			// transfer
+			if (STILL_MILK != null) {
 				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
@@ -136,46 +160,68 @@ public class Milk implements ModInitializer {
 						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BOTTLE), STILL_MILK, FluidConstants.BOTTLE)
 				);
 			}
-			if (CAULDRON_ENABLED && !MILK_BOTTLE_CAULDRON_BEHAVIOR) {
+			// cauldron interactions
+			if (MILK_CAULDRON != null && !CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.containsKey(MILK_BOTTLE)) {
 				CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR.put(MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Milk.MILK_BOTTLE, MilkCauldron.FILL_FROM_BOTTLE);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, MilkCauldron.EMPTY_TO_BOTTLE);
-				MILK_BOTTLE_CAULDRON_BEHAVIOR = true;
 			}
-			MILK_BOTTLE_ENABLED = true;
 		}
 	}
 
 	public static void enableSplashMilkBottle() {
-		if (!SPLASH_MILK_BOTTLE_ENABLED) {
-			Registry.register(Registry.ITEM, id("splash_milk_bottle"), SPLASH_MILK_BOTTLE);
+		if (SPLASH_MILK_BOTTLE == null) {
+			// register
+			SPLASH_MILK_BOTTLE = Registry.register(
+					Registry.ITEM,
+					id("splash_milk_bottle"),
+					new SplashMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING))
+			);
+			// potions
 			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(SPLASH_MILK_BOTTLE);
-			if (MILK_BOTTLE_ENABLED) {
+			if (MILK_BOTTLE != null) {
 				BrewingRecipeRegistryAccessor.invokeRegisterItemRecipe(MILK_BOTTLE, GUNPOWDER, SPLASH_MILK_BOTTLE);
 			}
-			if (FLUID_ENABLED) {
+			// transfer
+			if (STILL_MILK != null) {
 				FluidStorage.combinedItemApiProvider(SPLASH_MILK_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
 			}
-			SPLASH_MILK_BOTTLE_ENABLED = true;
 		}
 	}
 
 	public static void enableLingeringMilkBottle() {
-		if (!LINGERING_MILK_BOTTLE_ENABLED) {
-			Registry.register(Registry.ITEM, id("lingering_milk_bottle"), LINGERING_MILK_BOTTLE);
+		if (LINGERING_MILK_BOTTLE == null) {
+			// register
+			LINGERING_MILK_BOTTLE = Registry.register(
+					Registry.ITEM,
+					id("lingering_milk_bottle"),
+					new LingeringMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING))
+			);
+			// potions
 			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(LINGERING_MILK_BOTTLE);
-			Registry.register(Registry.ENTITY_TYPE, id("milk_area_effect_cloud"), MILK_EFFECT_CLOUD_ENTITY_TYPE);
-			if (SPLASH_MILK_BOTTLE_ENABLED) {
+			// lingering effect
+			MILK_EFFECT_CLOUD_ENTITY_TYPE = Registry.register(
+					Registry.ENTITY_TYPE,
+					id("milk_area_effect_cloud"),
+					FabricEntityTypeBuilder.<MilkAreaEffectCloudEntity>create()
+							.fireImmune()
+							.dimensions(EntityDimensions.fixed(6.0F, 0.5F))
+							.trackRangeChunks(10)
+							.trackedUpdateRate(Integer.MAX_VALUE)
+							.build()
+			);
+			// potions
+			if (SPLASH_MILK_BOTTLE != null) {
 				BrewingRecipeRegistryAccessor.invokeRegisterItemRecipe(SPLASH_MILK_BOTTLE, DRAGON_BREATH, LINGERING_MILK_BOTTLE);
 			}
-			if (FLUID_ENABLED) {
+			// transfer
+			if (STILL_MILK != null) {
 				FluidStorage.combinedItemApiProvider(LINGERING_MILK_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
 			}
-			LINGERING_MILK_BOTTLE_ENABLED = true;
 		}
 	}
 
@@ -183,6 +229,14 @@ public class Milk implements ModInitializer {
 		enableMilkBottle();
 		enableSplashMilkBottle();
 		enableLingeringMilkBottle();
+	}
+
+	public static boolean isMilk(FluidState state) {
+		return state.isOf(Milk.STILL_MILK) || state.isOf(Milk.FLOWING_MILK);
+	}
+
+	public static boolean isMilkBottle(Item item) {
+		return item == Milk.MILK_BOTTLE || item == Milk.SPLASH_MILK_BOTTLE || item == Milk.LINGERING_MILK_BOTTLE;
 	}
 
 	public static boolean tryRemoveRandomEffect(LivingEntity user) {

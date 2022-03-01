@@ -2,6 +2,8 @@ package io.github.tropheusj.milk.potion;
 
 import io.github.tropheusj.milk.Milk;
 import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;

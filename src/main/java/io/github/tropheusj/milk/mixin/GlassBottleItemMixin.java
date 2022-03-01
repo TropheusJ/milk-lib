@@ -31,11 +31,13 @@ public abstract class GlassBottleItemMixin extends Item {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V",
 			ordinal = 1, shift = At.Shift.AFTER), method = "use", cancellable = true)
 	public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-		BlockHitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
-		BlockPos blockPos = hitResult.getBlockPos();
-		FluidState state = world.getFluidState(blockPos);
-		if ((Milk.MILK_BOTTLE_ENABLED && Milk.FLUID_ENABLED) && (state.getFluid() == Milk.STILL_MILK || state.getFluid() == Milk.FLOWING_MILK)) {
-			cir.setReturnValue(TypedActionResult.success(fill(user.getStackInHand(hand), user, new ItemStack(Milk.MILK_BOTTLE))));
+		if (Milk.MILK_BOTTLE != null && Milk.STILL_MILK != null) {
+			BlockHitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+			BlockPos blockPos = hitResult.getBlockPos();
+			FluidState state = world.getFluidState(blockPos);
+			if (state.getFluid() == Milk.STILL_MILK || state.getFluid() == Milk.FLOWING_MILK) {
+				cir.setReturnValue(TypedActionResult.success(fill(user.getStackInHand(hand), user, new ItemStack(Milk.MILK_BOTTLE))));
+			}
 		}
 	}
 }

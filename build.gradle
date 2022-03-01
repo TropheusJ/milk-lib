@@ -12,15 +12,15 @@ targetCompatibility = JavaVersion.VERSION_17
 // --- versions ---
 group = "io.github.tropheusj"
 archivesBaseName = "milk"
-version = "0.1.6"
+version = "0.3.0"
 
 // https://fabricmc.net/versions.html
-String minecraft_version = "1.18.1"
-String yarn_mappings = "2"
-String loader_version = "0.12.12"
-String fabric_version = "0.45.0+1.18"
+String minecraft_version = "1.18.2"
+String yarn_mappings = "1"
+String loader_version = "0.13.3"
+String fabric_version = "0.47.8+1.18.2"
 
-String dripstone_fluid_lib_version = "1.1.1"
+String dripstone_fluid_lib_version = "1.2.0"
 String sodium_version = "0.3.3" // https://modrinth.com/mod/sodium
 String indium_version = "1.0.1" // https://modrinth.com/mod/indium
 String lithium_version = "0.7.5" // https://modrinth.com/mod/lithium
@@ -34,7 +34,7 @@ repositories {
 	maven { url = "https://api.modrinth.com/maven" }
 	maven { url = "https://maven.bai.lol" }
 	maven { url = "https://maven.terraformersmc.com/releases/" }
-	maven { url = "https://maven.devos.community/releases/" }
+	maven { url = "https://maven.devos.community/snapshots/" }
 }
 
 dependencies {
@@ -55,7 +55,19 @@ dependencies {
 
 	// dependencies
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-	modImplementation(include("io.github.tropheusj:dripstone_fluid_lib:${dripstone_fluid_lib_version}"))
+	modImplementation(include("io.github.tropheusj:dripstone-fluid-lib:${dripstone_fluid_lib_version}"))
+}
+
+task buildOrPublish {
+	group = "build"
+	String mavenUser = System.getenv().MAVEN_USER
+	if (mavenUser != null && !mavenUser.isEmpty()) {
+		dependsOn(tasks.getByName("publish"))
+		println "prepared for publish"
+	} else {
+		dependsOn(tasks.getByName("build"))
+		println "prepared for build"
+	}
 }
 
 loom {
@@ -70,7 +82,7 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach { it.options.release = 16 }
+tasks.withType(JavaCompile).configureEach { it.options.release = 17 }
 
 java {
 	withSourcesJar()
