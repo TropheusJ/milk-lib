@@ -42,7 +42,7 @@ dependencies {
 	minecraft("com.mojang:minecraft:${minecraft_version}")
 	mappings("net.fabricmc:yarn:${minecraft_version}+build.${yarn_mappings}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${loader_version}")
-	modCompileOnly("maven.modrinth:lazydfu:0.1.2")
+	modRuntimeOnly("maven.modrinth:lazydfu:0.1.2")
 //	modCompileOnly("maven.modrinth:suggestionproviderfabric:1.0.0")
 //	modCompileOnly("mcp.mobius.waila:wthit:fabric-${wthit_version}")
 //	modCompileOnly("maven.modrinth:sodium:mc${minecraft_version}-${sodium_version}")
@@ -55,7 +55,7 @@ dependencies {
 
 	// dependencies
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-	modImplementation(include("io.github.tropheusj:dripstone-fluid-lib:${dripstone_fluid_lib_version}"))
+	modApi(include("io.github.tropheusj:dripstone-fluid-lib:${dripstone_fluid_lib_version}"))
 }
 
 task buildOrPublish {

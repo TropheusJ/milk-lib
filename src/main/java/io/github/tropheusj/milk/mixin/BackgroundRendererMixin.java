@@ -35,7 +35,7 @@ public class BackgroundRendererMixin {
 	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clearColor(FFFF)V", remap = false))
 	private static void milk$modifyFogColors(Args args, Camera camera, float partialTicks, ClientWorld level, int renderDistanceChunks, float bossColorModifier) {
 		FluidState state = level.getFluidState(camera.getBlockPos());
-		if (state.isOf(Milk.STILL_MILK) || state.isOf(Milk.FLOWING_MILK)) {
+		if (Milk.isMilk(state)) {
 			red = 1;
 			green = 1;
 			blue = 1;
@@ -45,7 +45,7 @@ public class BackgroundRendererMixin {
 	@Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
 	private static void milk$applyFog(Camera camera, FogType fogType, float f, boolean bl, CallbackInfo ci) {
 		FluidState state = MinecraftClient.getInstance().world.getFluidState(camera.getBlockPos());
-		if (state.isOf(Milk.STILL_MILK) || state.isOf(Milk.FLOWING_MILK)) {
+		if (Milk.isMilk(state)) {
 			RenderSystem.setShaderFogStart(-8);
 			RenderSystem.setShaderFogEnd(5);
 			ci.cancel();

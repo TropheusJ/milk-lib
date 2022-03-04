@@ -76,6 +76,8 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 
 	@Override
 	public boolean placeFluid(@Nullable PlayerEntity player, World world, BlockPos pos, @Nullable BlockHitResult hitResult) {
+		if (Milk.STILL_MILK == null || !Milk.MILK_PLACING_ENABLED)
+			return false;
 		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		Material material = blockState.getMaterial();

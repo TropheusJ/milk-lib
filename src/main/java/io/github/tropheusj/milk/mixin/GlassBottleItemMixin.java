@@ -35,7 +35,7 @@ public abstract class GlassBottleItemMixin extends Item {
 			BlockHitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
 			BlockPos blockPos = hitResult.getBlockPos();
 			FluidState state = world.getFluidState(blockPos);
-			if (state.getFluid() == Milk.STILL_MILK || state.getFluid() == Milk.FLOWING_MILK) {
+			if (Milk.isMilk(state)) {
 				cir.setReturnValue(TypedActionResult.success(fill(user.getStackInHand(hand), user, new ItemStack(Milk.MILK_BOTTLE))));
 			}
 		}
