@@ -6,7 +6,7 @@ Just call the various methods in your mod initializer.
 ```groovy
 repositories {
     maven {
-        url = "https://maven.devos.community/snapshots/"
+        url = "https://mvn.devos.one/snapshots/"
     }
 }
 ```
