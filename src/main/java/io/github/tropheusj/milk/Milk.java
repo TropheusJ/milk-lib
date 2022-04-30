@@ -5,13 +5,15 @@ import static net.minecraft.item.Items.DRAGON_BREATH;
 import static net.minecraft.item.Items.GLASS_BOTTLE;
 import static net.minecraft.item.Items.GUNPOWDER;
 import static net.minecraft.item.Items.MILK_BUCKET;
+import static net.minecraft.item.Items.SPLASH_POTION;
 
 import io.github.tropheusj.milk.mixin.BrewingRecipeRegistryAccessor;
 import io.github.tropheusj.milk.potion.MilkAreaEffectCloudEntity;
+import io.github.tropheusj.milk.potion.MilkPotionDispenserBehavior;
 import io.github.tropheusj.milk.potion.bottle.LingeringMilkBottle;
 import io.github.tropheusj.milk.potion.bottle.MilkBottle;
+import io.github.tropheusj.milk.potion.bottle.PotionItemEntityExtensions;
 import io.github.tropheusj.milk.potion.bottle.SplashMilkBottle;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -24,22 +26,32 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.cauldron.CauldronBehavior;
+import net.minecraft.block.dispenser.DispenserBehavior;
+import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.Position;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class Milk {
@@ -155,7 +167,7 @@ public class Milk {
 					new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING))
 			);
 			// potions
-			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(MILK_BOTTLE);
+			BrewingRecipeRegistryAccessor.milk$registerPotionType(MILK_BOTTLE);
 			// transfer
 			if (STILL_MILK != null) {
 				FluidStorage.combinedItemApiProvider(MILK_BOTTLE).register(context ->
@@ -176,6 +188,8 @@ public class Milk {
 						Items.GLASS_BOTTLE.getDefaultStack(), Milk.MILK_BOTTLE.getDefaultStack(), true);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, emptyToBottle);
 			}
+			// dispenser interactions
+			DispenserBlock.registerBehavior(MILK_BOTTLE, MilkPotionDispenserBehavior.INSTANCE);
 		}
 	}
 
@@ -188,9 +202,9 @@ public class Milk {
 					new SplashMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING))
 			);
 			// potions
-			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(SPLASH_MILK_BOTTLE);
+			BrewingRecipeRegistryAccessor.milk$registerPotionType(SPLASH_MILK_BOTTLE);
 			if (MILK_BOTTLE != null) {
-				BrewingRecipeRegistryAccessor.invokeRegisterItemRecipe(MILK_BOTTLE, GUNPOWDER, SPLASH_MILK_BOTTLE);
+				BrewingRecipeRegistryAccessor.milk$registerItemRecipe(MILK_BOTTLE, GUNPOWDER, SPLASH_MILK_BOTTLE);
 			}
 			// transfer
 			if (STILL_MILK != null) {
@@ -198,6 +212,8 @@ public class Milk {
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
 			}
+			// dispenser interactions
+			DispenserBlock.registerBehavior(SPLASH_MILK_BOTTLE, MilkPotionDispenserBehavior.INSTANCE);
 		}
 	}
 
@@ -210,7 +226,7 @@ public class Milk {
 					new LingeringMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING))
 			);
 			// potions
-			BrewingRecipeRegistryAccessor.invokeRegisterPotionType(LINGERING_MILK_BOTTLE);
+			BrewingRecipeRegistryAccessor.milk$registerPotionType(LINGERING_MILK_BOTTLE);
 			// lingering effect
 			MILK_EFFECT_CLOUD_ENTITY_TYPE = Registry.register(
 					Registry.ENTITY_TYPE,
@@ -224,7 +240,7 @@ public class Milk {
 			);
 			// potions
 			if (SPLASH_MILK_BOTTLE != null) {
-				BrewingRecipeRegistryAccessor.invokeRegisterItemRecipe(SPLASH_MILK_BOTTLE, DRAGON_BREATH, LINGERING_MILK_BOTTLE);
+				BrewingRecipeRegistryAccessor.milk$registerItemRecipe(SPLASH_MILK_BOTTLE, DRAGON_BREATH, LINGERING_MILK_BOTTLE);
 			}
 			// transfer
 			if (STILL_MILK != null) {
@@ -232,6 +248,8 @@ public class Milk {
 						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(STILL_MILK), FluidConstants.BOTTLE)
 				);
 			}
+			// dispenser interactions
+			DispenserBlock.registerBehavior(LINGERING_MILK_BOTTLE, MilkPotionDispenserBehavior.INSTANCE);
 		}
 	}
 

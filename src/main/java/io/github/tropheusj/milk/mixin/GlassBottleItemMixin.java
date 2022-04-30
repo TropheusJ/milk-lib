@@ -30,7 +30,7 @@ public abstract class GlassBottleItemMixin extends Item {
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V",
 			ordinal = 1, shift = At.Shift.AFTER), method = "use", cancellable = true)
-	public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
+	public void milk$use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
 		if (Milk.MILK_BOTTLE != null && Milk.STILL_MILK != null) {
 			BlockHitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
 			BlockPos blockPos = hitResult.getBlockPos();

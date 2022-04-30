@@ -6,12 +6,12 @@ Just call the various methods in your mod initializer.
 ```groovy
 repositories {
     maven {
-        url = "https://maven.devos.community/snapshots/"
+        url = "https://mvn.devos.one/snapshots/"
     }
 }
 ```
 ```groovy
 dependencies {
-    modImplementation(include("io.github.tropheusj:milk-lib:0.3.0"))
+    modImplementation(include("io.github.tropheusj:milk-lib:0.3.1"))
 }
 ```

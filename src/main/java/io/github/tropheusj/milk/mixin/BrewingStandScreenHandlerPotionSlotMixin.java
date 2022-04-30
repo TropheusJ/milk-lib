@@ -12,7 +12,7 @@ import net.minecraft.screen.BrewingStandScreenHandler;
 @Mixin(BrewingStandScreenHandler.PotionSlot.class)
 public abstract class BrewingStandScreenHandlerPotionSlotMixin {
 	@Inject(method = "matches", at = @At("HEAD"), cancellable = true)
-	private static void matches(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+	private static void milk$matches(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 		if (stack.isOf(Milk.SPLASH_MILK_BOTTLE)  || stack.isOf(Milk.LINGERING_MILK_BOTTLE) || stack.isOf(Milk.MILK_BOTTLE)) {
 			cir.setReturnValue(true);
 		}

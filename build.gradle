@@ -1,8 +1,8 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection GroovyAccessibility
 plugins {
-	id "fabric-loom" version "0.10-SNAPSHOT"
-	id "io.github.juuxel.loom-quiltflower-mini" version "1.+"
+	id "fabric-loom" version "0.12-SNAPSHOT"
+	id "io.github.juuxel.loom-quiltflower" version "1.+"
 	id "maven-publish"
 }
 
@@ -12,7 +12,7 @@ targetCompatibility = JavaVersion.VERSION_17
 // --- versions ---
 group = "io.github.tropheusj"
 archivesBaseName = "milk"
-version = "0.3.0"
+version = "0.3.1"
 
 // https://fabricmc.net/versions.html
 String minecraft_version = "1.18.2"
@@ -34,7 +34,7 @@ repositories {
 	maven { url = "https://api.modrinth.com/maven" }
 	maven { url = "https://maven.bai.lol" }
 	maven { url = "https://maven.terraformersmc.com/releases/" }
-	maven { url = "https://maven.devos.community/snapshots/" }
+	maven { url = "https://mvn.devos.one/snapshots/" }
 }
 
 dependencies {
@@ -63,10 +63,10 @@ task buildOrPublish {
 	String mavenUser = System.getenv().MAVEN_USER
 	if (mavenUser != null && !mavenUser.isEmpty()) {
 		dependsOn(tasks.getByName("publish"))
-		println "prepared for publish"
+		println("prepared for publish")
 	} else {
 		dependsOn(tasks.getByName("build"))
-		println "prepared for build"
+		println("prepared for build")
 	}
 }
 
@@ -94,7 +94,6 @@ jar {
 	}
 }
 
-// configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
@@ -103,13 +102,8 @@ publishing {
 	}
 
 	repositories {
-		String suffix = System.getenv().PUBLISH_SUFFIX // 'releases' or 'snapshots'
-		if (suffix == null || suffix.isEmpty()) {
-			System.out.println("Failed to publish to maven!")
-			return
-		}
 		maven {
-			url = "https://maven.devos.community/${suffix}/"
+			url = "https://mvn.devos.one/${System.getenv().PUBLISH_SUFFIX}/"
 			credentials {
 				username = System.getenv().MAVEN_USER
 				password = System.getenv().MAVEN_PASS

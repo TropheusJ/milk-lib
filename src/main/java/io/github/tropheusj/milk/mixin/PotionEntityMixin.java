@@ -53,7 +53,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	}
 
 	@Inject(method = "onBlockHit", at = @At(value = "HEAD"))
-	protected void onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) {
+	protected void milk$onBlockHit(BlockHitResult blockHitResult, CallbackInfo ci) {
 		if (isMilk()) {
 			Direction side = blockHitResult.getSide();
 			BlockPos pos = blockHitResult.getBlockPos().offset(side);
@@ -67,7 +67,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	}
 
 	@Inject(method = "onCollision", at = @At(value = "HEAD"), cancellable = true)
-	protected void onCollision(HitResult hitResult, CallbackInfo ci) {
+	protected void milk$onCollision(HitResult hitResult, CallbackInfo ci) {
 		if (isMilk()) {
 			super.onCollision(hitResult);
 			if (!this.world.isClient) {
@@ -86,7 +86,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	}
 
 	@Inject(method = "applySplashPotion", at = @At("HEAD"), cancellable = true)
-	private void applySplashPotion(List<StatusEffectInstance> statusEffects, Entity entity, CallbackInfo ci) {
+	private void milk$applySplashPotion(List<StatusEffectInstance> statusEffects, Entity entity, CallbackInfo ci) {
 		if (isMilk()) {
 			Box box = this.getBoundingBox().expand(4.0, 2.0, 4.0);
 			List<LivingEntity> list = this.world.getNonSpectatingEntities(LivingEntity.class, box);
@@ -105,7 +105,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	}
 
 	@Inject(method = "applyLingeringPotion", at = @At("HEAD"), cancellable = true)
-	private void applyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci) {
+	private void milk$applyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci) {
 		if (isMilk()) {
 			MilkAreaEffectCloudEntity areaEffectCloudEntity = new MilkAreaEffectCloudEntity(this.world, this.getX(), this.getY(), this.getZ());
 			Entity entity = this.getOwner();

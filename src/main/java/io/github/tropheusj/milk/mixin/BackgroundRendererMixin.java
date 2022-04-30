@@ -22,7 +22,7 @@ import net.minecraft.fluid.FluidState;
 
 @Environment(EnvType.CLIENT)
 @Mixin(BackgroundRenderer.class)
-public class BackgroundRendererMixin {
+public abstract class BackgroundRendererMixin {
 	@Shadow
 	private static float red;
 
