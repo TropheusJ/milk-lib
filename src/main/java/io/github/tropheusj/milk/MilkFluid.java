@@ -82,7 +82,7 @@ public abstract class MilkFluid extends FlowableFluid implements DripstoneIntera
 
 	@Override
 	protected boolean isInfinite() {
-		return true;
+		return Milk.INFINITE_MILK_FLUID;
 	}
 
 	@Override

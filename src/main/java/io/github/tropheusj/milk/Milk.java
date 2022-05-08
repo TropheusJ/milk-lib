@@ -5,14 +5,12 @@ import static net.minecraft.item.Items.DRAGON_BREATH;
 import static net.minecraft.item.Items.GLASS_BOTTLE;
 import static net.minecraft.item.Items.GUNPOWDER;
 import static net.minecraft.item.Items.MILK_BUCKET;
-import static net.minecraft.item.Items.SPLASH_POTION;
 
 import io.github.tropheusj.milk.mixin.BrewingRecipeRegistryAccessor;
 import io.github.tropheusj.milk.potion.MilkAreaEffectCloudEntity;
 import io.github.tropheusj.milk.potion.MilkPotionDispenserBehavior;
 import io.github.tropheusj.milk.potion.bottle.LingeringMilkBottle;
 import io.github.tropheusj.milk.potion.bottle.MilkBottle;
-import io.github.tropheusj.milk.potion.bottle.PotionItemEntityExtensions;
 import io.github.tropheusj.milk.potion.bottle.SplashMilkBottle;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -30,28 +28,19 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.block.dispenser.DispenserBehavior;
-import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPointer;
-import net.minecraft.util.math.Position;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class Milk {
@@ -71,6 +60,8 @@ public class Milk {
 
 	// if true, milk can be placed from buckets.
 	public static boolean MILK_PLACING_ENABLED = false;
+	// if true, milk can make infinite sources like water.
+	public static boolean INFINITE_MILK_FLUID = true;
 
 	public static EntityType<MilkAreaEffectCloudEntity> MILK_EFFECT_CLOUD_ENTITY_TYPE = null;
 
@@ -129,6 +120,10 @@ public class Milk {
 				);
 			}
 		}
+	}
+
+	public static void finiteMilkFluid() {
+		INFINITE_MILK_FLUID = false;
 	}
 
 	public static void enableCauldron() {

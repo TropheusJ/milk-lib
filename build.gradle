@@ -12,7 +12,7 @@ targetCompatibility = JavaVersion.VERSION_17
 // --- versions ---
 group = "io.github.tropheusj"
 archivesBaseName = "milk"
-version = "0.3.1"
+version = "0.3.2"
 
 // https://fabricmc.net/versions.html
 String minecraft_version = "1.18.2"
@@ -27,7 +27,7 @@ String lithium_version = "0.7.5" // https://modrinth.com/mod/lithium
 String phosphor_version = "0.8.0" // https://modrinth.com/mod/phosphor
 String iris_version = "1.1.3" // https://modrinth.com/mod/iris
 String wthit_version = "3.11.2" // https://modrinth.com/mod/wthit
-String modmenu_version = "2.0.14" // https://modrinth.com/mod/modmenu
+String modmenu_version = "3.1.0" // https://modrinth.com/mod/modmenu
 // ----------------
 
 repositories {
@@ -51,7 +51,7 @@ dependencies {
 //	modCompileOnly("maven.modrinth:lithium:mc${minecraft_version}-${lithium_version}")
 //	modCompileOnly("maven.modrinth:phosphor:mc1.17.x-${phosphor_version}")
 //	modCompileOnly("maven.modrinth:iris:mc${minecraft_version}-${iris_version}")
-//	modCompileOnly("com.terraformersmc:modmenu:${modmenu_version}") { exclude group: "net.fabricmc" exclude group: "net.fabricmc.fabric-api" }
+	modCompileOnly("com.terraformersmc:modmenu:${modmenu_version}") { exclude group: "net.fabricmc" exclude group: "net.fabricmc.fabric-api" }
 
 	// dependencies
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
