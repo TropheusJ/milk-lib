@@ -12,6 +12,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-    modImplementation(include("io.github.tropheusj:milk-lib:0.3.2"))
+    modImplementation(include("io.github.tropheusj:milk-lib:<version>"))
 }
 ```
+Find the version on [the maven](https://mvn.devos.one/#/snapshots/io/github/tropheusj/milk-lib).
