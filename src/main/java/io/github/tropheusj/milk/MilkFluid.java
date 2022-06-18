@@ -8,7 +8,7 @@ import static net.minecraft.item.Items.MILK_BUCKET;
 
 import java.util.Optional;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.block.PointedDripstoneBlock.DrippingFluid;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -111,17 +111,17 @@ public abstract class MilkFluid extends FlowableFluid implements DripstoneIntera
 	}
 
 	@Override
-	public int getFluidDripWorldEvent(BlockState state, World world, BlockPos cauldronPos) {
-		return WorldEvents.POINTED_DRIPSTONE_DRIPS_WATER_INTO_CAULDRON;
+	public boolean fillsCauldrons(BlockState state, World world, BlockPos cauldronPos) {
+		return MILK_CAULDRON != null;
 	}
 
 	@Override
 	public @Nullable BlockState getCauldronBlockState(BlockState state, World world, BlockPos cauldronPos) {
-		return MILK_CAULDRON != null ? MILK_CAULDRON.getDefaultState() : null;
+		return MILK_CAULDRON.getDefaultState();
 	}
 
 	@Override
-	public float getFluidDripChance(BlockState state, World world, BlockPos pos) {
+	public float getFluidDripChance(World world, DrippingFluid drippingFluid) {
 		return WATER_DRIP_CHANCE;
 	}
 
