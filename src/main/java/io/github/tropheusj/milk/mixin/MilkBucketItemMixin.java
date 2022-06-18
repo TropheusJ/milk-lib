@@ -87,7 +87,7 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 				block instanceof FluidFillable fillable && fillable.canFillWithFluid(world, pos, blockState, Milk.STILL_MILK);
 		if (!bl2) {
 			return hitResult != null && this.placeFluid(player, world, hitResult.getBlockPos().offset(hitResult.getSide()), null);
-		} else if (world.getDimension().isUltrawarm()) {
+		} else if (world.getDimension().ultrawarm()) {
 			int i = pos.getX();
 			int j = pos.getY();
 			int k = pos.getZ();
