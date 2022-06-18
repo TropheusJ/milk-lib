@@ -183,6 +183,8 @@ public class Milk {
 						Items.GLASS_BOTTLE.getDefaultStack(), Milk.MILK_BOTTLE.getDefaultStack(), true);
 				MilkCauldron.MILK_CAULDRON_BEHAVIOR.put(Items.GLASS_BOTTLE, emptyToBottle);
 			}
+			// dispenser interactions
+			DispenserBlock.registerBehavior(MILK_BOTTLE, MilkPotionDispenserBehavior.INSTANCE);
 		}
 	}
 

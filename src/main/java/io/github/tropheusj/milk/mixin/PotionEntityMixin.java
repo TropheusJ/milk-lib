@@ -36,14 +36,14 @@ import net.minecraft.world.WorldEvents;
 @Mixin(PotionEntity.class)
 public abstract class PotionEntityMixin extends ThrownItemEntity implements FlyingItemEntity, PotionItemEntityExtensions {
 	@Shadow
+	protected abstract void damageEntitiesHurtByWater();
+
+	@Shadow
 	protected abstract void applySplashPotion(List<StatusEffectInstance> statusEffects, @Nullable Entity entity);
 
 	@Shadow protected abstract void applyLingeringPotion(ItemStack stack, Potion potion);
 
 	@Shadow protected abstract void extinguishFire(BlockPos pos);
-
-	@Shadow
-	protected abstract void applyWater();
 
 	@Unique
 	private boolean milk = false;
@@ -71,7 +71,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 		if (isMilk()) {
 			super.onCollision(hitResult);
 			if (!this.world.isClient) {
-				applyWater();
+				damageEntitiesHurtByWater();
 				if (getItem().getItem() instanceof LingeringMilkBottle) {
 					applyLingeringPotion(null, null);
 				} else {

@@ -51,7 +51,7 @@ public class MilkBottle extends Item {
 			}
 		}
 
-		user.emitGameEvent(GameEvent.DRINK);
+		world.emitGameEvent(user, GameEvent.DRINKING_FINISH, user.getCameraBlockPos());
 		return stack;
 	}
 
