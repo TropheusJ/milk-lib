@@ -2,6 +2,8 @@ package io.github.tropheusj.milk.mixin;
 
 import static net.minecraft.item.BucketItem.getEmptiedStack;
 
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.BucketItem;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -55,13 +57,15 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 		}
 
 		BlockPos hit = blockHitResult.getBlockPos();
+		Block blockHit = world.getBlockState(hit).getBlock();
 		Direction direction = blockHitResult.getSide();
 		BlockPos offset = hit.offset(direction);
 		if (world.canPlayerModifyAt(user, hit) && user.canPlaceOn(offset, direction, itemStack)) {
-			if (this.placeFluid(user, world, offset, blockHitResult)) {
-				this.onEmptied(user, world, itemStack, offset);
+			BlockPos pos = blockHit instanceof FluidFillable ? hit : offset;
+			if (this.placeFluid(user, world, pos, blockHitResult)) {
+				this.onEmptied(user, world, itemStack, pos);
 				if (user instanceof ServerPlayerEntity server) {
-					Criteria.PLACED_BLOCK.trigger(server, offset, itemStack);
+					Criteria.PLACED_BLOCK.trigger(server, pos, itemStack);
 				}
 
 				user.incrementStat(Stats.USED.getOrCreateStat(this));
