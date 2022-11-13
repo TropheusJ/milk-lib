@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "io.github.tropheusj.milk.Client"
+      "io.github.tropheusj.milk.MilkClient"
     ]
   },
   "mixins": [

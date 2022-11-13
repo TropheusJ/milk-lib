@@ -15,6 +15,8 @@ import io.github.tropheusj.milk.potion.bottle.SplashMilkBottle;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalFluidTags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.fabricmc.fabric.api.transfer.v1.fluid.CauldronFluidContent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -67,11 +69,11 @@ public class Milk {
 
 	// tags.
 	// all milk fluids.
-	public static final TagKey<Fluid> MILK_FLUID_TAG = TagKey.of(Registry.FLUID_KEY, new Identifier("c", "milk"));
+	public static final TagKey<Fluid> MILK_FLUID_TAG = ConventionalFluidTags.MILK;
 	// all milk bottles.
 	public static final TagKey<Item> MILK_BOTTLE_TAG = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "milk_bottles"));
 	// all milk buckets.
-	public static final TagKey<Item> MILK_BUCKET_TAG = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "milk_buckets"));
+	public static final TagKey<Item> MILK_BUCKET_TAG = ConventionalItemTags.MILK_BUCKETS;
 
 	public static void enableMilkPlacing() {
 		if (STILL_MILK == null) {
