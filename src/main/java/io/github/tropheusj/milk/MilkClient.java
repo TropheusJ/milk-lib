@@ -31,10 +31,6 @@ public class MilkClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		Milk.enableMilkFluid();
-		Milk.enableMilkPlacing();
-		Milk.enableCauldron();
-		Milk.enableAllMilkBottles();
 		if (STILL_MILK != null) {
 			setupFluidRendering(STILL_MILK, FLOWING_MILK, id("milk"));
 			BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), STILL_MILK, FLOWING_MILK);
