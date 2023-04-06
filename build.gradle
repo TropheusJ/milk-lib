@@ -2,11 +2,10 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GradlePackageVersionRange
 plugins {
-	id "fabric-loom" version "0.12-SNAPSHOT"
+	id "fabric-loom" version "1.0.+"
 	id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
 	id "org.quiltmc.quilt-mappings-on-loom" version "4.2.+" // Quilt Mappings, for parameters and javadoc. Also hashed mojmap.
 	id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
-	id "org.ajoberstar.grgit" version "4.1.1"
 	id "maven-publish"
 }
 
@@ -19,6 +18,8 @@ group = project.maven_group
 ext.buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 String patch = buildNumber != null ? buildNumber : "99999"
 version = project.mod_version.replace("<build>", patch)
+
+Project dripstoneLib = getParent().findProject("dripstone-fluid-lib")
 
 repositories {
 	maven { url = "https://api.modrinth.com/maven" }
@@ -46,7 +47,19 @@ dependencies {
 
 	// dependencies
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-	modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
+
+	if (dripstoneLib == null)
+		modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
+}
+
+sourceSets {
+	if (dripstoneLib != null) {
+		main {
+			def main = dripstoneLib.sourceSets.main
+			compileClasspath += main.compileClasspath + main.output
+			runtimeClasspath += main.runtimeClasspath + main.output
+		}
+	}
 }
 
 task buildOrPublish {
