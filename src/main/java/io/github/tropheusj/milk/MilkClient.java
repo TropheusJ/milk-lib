@@ -9,10 +9,8 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
 public class MilkClient implements ClientModInitializer {
@@ -23,10 +21,6 @@ public class MilkClient implements ClientModInitializer {
 		FluidRenderHandler handler = new SimpleFluidRenderHandler(stillTexture, flowingTexture);
 		FluidRenderHandlerRegistry.INSTANCE.register(still, handler);
 		FluidRenderHandlerRegistry.INSTANCE.register(flowing, handler);
-		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
-			registry.register(stillTexture);
-			registry.register(flowingTexture);
-		});
 	}
 
 	@Override

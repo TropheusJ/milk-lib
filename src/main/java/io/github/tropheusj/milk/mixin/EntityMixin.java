@@ -1,8 +1,6 @@
 package io.github.tropheusj.milk.mixin;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.tag.TagKey;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,6 +10,7 @@ import io.github.tropheusj.milk.Milk;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.registry.tag.TagKey;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {

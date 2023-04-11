@@ -2,9 +2,8 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GradlePackageVersionRange
 plugins {
-	id "fabric-loom" version "1.0.+"
+	id "fabric-loom" version "1.1.+"
 	id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
-	id "org.quiltmc.quilt-mappings-on-loom" version "4.2.+" // Quilt Mappings, for parameters and javadoc. Also hashed mojmap.
 	id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
 	id "maven-publish"
 }
@@ -19,8 +18,6 @@ ext.buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 String patch = buildNumber != null ? buildNumber : "99999"
 version = project.mod_version.replace("<build>", patch)
 
-Project dripstoneLib = getParent().findProject("dripstone-fluid-lib")
-
 repositories {
 	maven { url = "https://api.modrinth.com/maven" }
 	maven { url = "https://maven.bai.lol" }
@@ -34,32 +31,15 @@ dependencies {
 	minecraft("com.mojang:minecraft:${project.minecraft_version}")
 	mappings("net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
-	modLocalRuntime("maven.modrinth:lazydfu:0.1.2")
 	modLocalRuntime("maven.modrinth:suggestion-tweaker:${project.suggestion_tweaker_version}")
 	modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") { exclude(group: "net.fabricmc.fabric-api") }
-	modLocalRuntime("mcp.mobius.waila:wthit:fabric-${project.wthit_version}")
-	modLocalRuntime("maven.modrinth:badpackets:fabric-${project.bad_packets_version}")
-	modLocalRuntime("maven.modrinth:sodium:${project.sodium_version}") // rendering beware
-	localRuntime("org.joml:joml:1.10.4")
-	modLocalRuntime("maven.modrinth:lithium:${project.lithium_version}")
-	modLocalRuntime("maven.modrinth:iris:${project.iris_version}")
+	modLocalRuntime("maven.modrinth:jade:${project.jade_version}")
 	modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") { exclude group: "net.fabricmc"; exclude group: "net.fabricmc.fabric-api" }
 
 	// dependencies
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
 
-	if (dripstoneLib == null)
-		modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
-}
-
-sourceSets {
-	if (dripstoneLib != null) {
-		main {
-			def main = dripstoneLib.sourceSets.main
-			compileClasspath += main.compileClasspath + main.output
-			runtimeClasspath += main.runtimeClasspath + main.output
-		}
-	}
+	modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
 }
 
 task buildOrPublish {

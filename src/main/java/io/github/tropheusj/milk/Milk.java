@@ -12,7 +12,9 @@ import io.github.tropheusj.milk.potion.MilkPotionDispenserBehavior;
 import io.github.tropheusj.milk.potion.bottle.LingeringMilkBottle;
 import io.github.tropheusj.milk.potion.bottle.MilkBottle;
 import io.github.tropheusj.milk.potion.bottle.SplashMilkBottle;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalFluidTags;
@@ -39,13 +41,16 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 @SuppressWarnings("UnstableApiUsage")
-public class Milk {
+public class Milk implements ModInitializer {
 	public static final String MOD_ID = "milk";
 	// fluids - if any are non-null, all are non-null.
 	public static FlowableFluid STILL_MILK = null;
@@ -71,7 +76,7 @@ public class Milk {
 	// all milk fluids.
 	public static final TagKey<Fluid> MILK_FLUID_TAG = ConventionalFluidTags.MILK;
 	// all milk bottles.
-	public static final TagKey<Item> MILK_BOTTLE_TAG = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "milk_bottles"));
+	public static final TagKey<Item> MILK_BOTTLE_TAG = TagKey.of(RegistryKeys.ITEM, new Identifier("c", "milk_bottles"));
 	// all milk buckets.
 	public static final TagKey<Item> MILK_BUCKET_TAG = ConventionalItemTags.MILK_BUCKETS;
 
@@ -86,17 +91,17 @@ public class Milk {
 		if (STILL_MILK == null) {
 			// register
 			STILL_MILK = Registry.register(
-					Registry.FLUID,
+					Registries.FLUID,
 					id("still_milk"),
 					new MilkFluid.Still()
 			);
 			FLOWING_MILK = Registry.register(
-					Registry.FLUID,
+					Registries.FLUID,
 					id("flowing_milk"),
 					new MilkFluid.Flowing()
 			);
 			MILK_FLUID_BLOCK = Registry.register(
-					Registry.BLOCK,
+					Registries.BLOCK,
 					id("milk_fluid_block"),
 					new MilkFluidBlock(STILL_MILK, FabricBlockSettings.copyOf(Blocks.WATER).mapColor(MapColor.WHITE))
 			);
@@ -132,7 +137,7 @@ public class Milk {
 		if (MILK_CAULDRON == null) {
 			// register
 			MILK_CAULDRON = Registry.register(
-					Registry.BLOCK,
+					Registries.BLOCK,
 					id("milk_cauldron"),
 					new MilkCauldron(FabricBlockSettings.copyOf(Blocks.CAULDRON))
 			);
@@ -159,9 +164,9 @@ public class Milk {
 		if (MILK_BOTTLE == null) {
 			// register
 			MILK_BOTTLE = Registry.register(
-					Registry.ITEM,
+					Registries.ITEM,
 					id("milk_bottle"),
-					new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1).group(ItemGroup.BREWING))
+					new MilkBottle(new FabricItemSettings().recipeRemainder(Items.GLASS_BOTTLE).maxCount(1))
 			);
 			// potions
 			BrewingRecipeRegistryAccessor.milk$registerPotionType(MILK_BOTTLE);
@@ -192,9 +197,9 @@ public class Milk {
 		if (SPLASH_MILK_BOTTLE == null) {
 			// register
 			SPLASH_MILK_BOTTLE = Registry.register(
-					Registry.ITEM,
+					Registries.ITEM,
 					id("splash_milk_bottle"),
-					new SplashMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING))
+					new SplashMilkBottle(new FabricItemSettings().maxCount(1))
 			);
 			// potions
 			BrewingRecipeRegistryAccessor.milk$registerPotionType(SPLASH_MILK_BOTTLE);
@@ -216,15 +221,15 @@ public class Milk {
 		if (LINGERING_MILK_BOTTLE == null) {
 			// register
 			LINGERING_MILK_BOTTLE = Registry.register(
-					Registry.ITEM,
+					Registries.ITEM,
 					id("lingering_milk_bottle"),
-					new LingeringMilkBottle(new FabricItemSettings().maxCount(1).group(ItemGroup.BREWING))
+					new LingeringMilkBottle(new FabricItemSettings().maxCount(1))
 			);
 			// potions
 			BrewingRecipeRegistryAccessor.milk$registerPotionType(LINGERING_MILK_BOTTLE);
 			// lingering effect
 			MILK_EFFECT_CLOUD_ENTITY_TYPE = Registry.register(
-					Registry.ENTITY_TYPE,
+					Registries.ENTITY_TYPE,
 					id("milk_area_effect_cloud"),
 					FabricEntityTypeBuilder.<MilkAreaEffectCloudEntity>create()
 							.fireImmune()
@@ -270,6 +275,22 @@ public class Milk {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void onInitialize() {
+//		enableMilkFluid();
+//		enableMilkPlacing();
+//		enableAllMilkBottles();
+//		enableCauldron();
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
+			if (MILK_BOTTLE != null)
+				entries.add(MILK_BOTTLE);
+			if (SPLASH_MILK_BOTTLE != null)
+				entries.add(SPLASH_MILK_BOTTLE);
+			if (LINGERING_MILK_BOTTLE != null)
+				entries.add(LINGERING_MILK_BOTTLE);
+		});
 	}
 
 	public static Identifier id(String path) {
