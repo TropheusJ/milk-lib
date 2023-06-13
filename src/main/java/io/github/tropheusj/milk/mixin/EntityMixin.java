@@ -17,7 +17,7 @@ public abstract class EntityMixin {
 	@Inject(method = "updateMovementInFluid", at = @At("HEAD"))
 	public void milk$updateMovementInFluid(TagKey<Fluid> tag, double speed, CallbackInfoReturnable<Boolean> cir) {
 		if ((Object) this instanceof LivingEntity entity && Milk.STILL_MILK != null) {
-			FluidState state = entity.world.getFluidState(entity.getBlockPos());
+			FluidState state = entity.getWorld().getFluidState(entity.getBlockPos());
 			if (Milk.isMilk(state)) {
 				if (entity.getStatusEffects().size() > 0) {
 					entity.clearStatusEffects();

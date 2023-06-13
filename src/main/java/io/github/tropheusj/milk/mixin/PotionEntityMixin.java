@@ -70,7 +70,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	protected void milk$onCollision(HitResult hitResult, CallbackInfo ci) {
 		if (isMilk()) {
 			super.onCollision(hitResult);
-			if (!this.world.isClient) {
+			if (!this.getWorld().isClient) {
 				applyWater();
 				if (getItem().getItem() instanceof LingeringMilkBottle) {
 					applyLingeringPotion(null, null);
@@ -78,7 +78,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 					applySplashPotion(null, hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null);
 				}
 
-				this.world.syncWorldEvent(WorldEvents.INSTANT_SPLASH_POTION_SPLASHED, this.getBlockPos(), 0xFFFFFF);
+				this.getWorld().syncWorldEvent(WorldEvents.INSTANT_SPLASH_POTION_SPLASHED, this.getBlockPos(), 0xFFFFFF);
 				this.discard();
 			}
 			ci.cancel();
@@ -89,7 +89,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	private void milk$applySplashPotion(List<StatusEffectInstance> statusEffects, Entity entity, CallbackInfo ci) {
 		if (isMilk()) {
 			Box box = this.getBoundingBox().expand(4.0, 2.0, 4.0);
-			List<LivingEntity> list = this.world.getNonSpectatingEntities(LivingEntity.class, box);
+			List<LivingEntity> list = this.getWorld().getNonSpectatingEntities(LivingEntity.class, box);
 			if (!list.isEmpty()) {
 				for (LivingEntity livingEntity : list) {
 					if (livingEntity.isAffectedBySplashPotions()) {
@@ -107,7 +107,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 	@Inject(method = "applyLingeringPotion", at = @At("HEAD"), cancellable = true)
 	private void milk$applyLingeringPotion(ItemStack stack, Potion potion, CallbackInfo ci) {
 		if (isMilk()) {
-			MilkAreaEffectCloudEntity areaEffectCloudEntity = new MilkAreaEffectCloudEntity(this.world, this.getX(), this.getY(), this.getZ());
+			MilkAreaEffectCloudEntity areaEffectCloudEntity = new MilkAreaEffectCloudEntity(this.getWorld(), this.getX(), this.getY(), this.getZ());
 			Entity entity = this.getOwner();
 			if (entity instanceof LivingEntity) {
 				areaEffectCloudEntity.setOwner((LivingEntity) entity);
@@ -118,7 +118,7 @@ public abstract class PotionEntityMixin extends ThrownItemEntity implements Flyi
 			areaEffectCloudEntity.setWaitTime(10);
 			areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float) areaEffectCloudEntity.getDuration());
 
-			this.world.spawnEntity(areaEffectCloudEntity);
+			this.getWorld().spawnEntity(areaEffectCloudEntity);
 			ci.cancel();
 		}
 	}

@@ -11,7 +11,6 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidFillable;
-import net.minecraft.block.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FluidModificationItem;
 import net.minecraft.item.Item;
@@ -80,7 +79,6 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 			return false;
 		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		Material material = blockState.getMaterial();
 		boolean canPlace = blockState.canBucketPlace(Milk.STILL_MILK);
 		boolean bl2 = blockState.isAir() ||
 				canPlace ||
@@ -112,7 +110,7 @@ public abstract class MilkBucketItemMixin extends Item implements FluidModificat
 			this.playEmptyingSound(player, world, pos);
 			return true;
 		} else {
-			if (!world.isClient && canPlace && !material.isLiquid()) {
+			if (!world.isClient && canPlace && !blockState.isLiquid()) {
 				world.breakBlock(pos, true);
 			}
 

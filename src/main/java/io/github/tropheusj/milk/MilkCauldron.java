@@ -168,7 +168,7 @@ public class MilkCauldron extends LeveledCauldronBlock {
 	}
 
 	private static boolean typeAndDataEqual(ItemStack stack1, ItemStack stack2, boolean ignoreNbt) {
-		boolean itemsEqual = stack1.isItemEqual(stack2);
+		boolean itemsEqual = ItemStack.areItemsEqual(stack1, stack2);
 		if (ignoreNbt) return itemsEqual;
 		boolean nbtEqual = stack1.hasNbt() ? stack1.getNbt().equals(stack2.getNbt()) : stack2.hasNbt();
 		return itemsEqual && nbtEqual;

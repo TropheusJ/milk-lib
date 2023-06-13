@@ -269,7 +269,7 @@ public class Milk implements ModInitializer {
 
 	public static boolean tryRemoveRandomEffect(LivingEntity user) {
 		if (user.getStatusEffects().size() > 0) {
-			int indexOfEffectToRemove = user.world.random.nextInt(user.getStatusEffects().size());
+			int indexOfEffectToRemove = user.getWorld().random.nextInt(user.getStatusEffects().size());
 			StatusEffectInstance effectToRemove = (StatusEffectInstance) user.getStatusEffects().toArray()[indexOfEffectToRemove];
 			user.removeStatusEffect(effectToRemove.getEffectType());
 			return true;
