@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.event.GameEvent;
 
-@Mixin(MilkBucketItem.class)
+@Mixin(value = MilkBucketItem.class, priority = 921) // apply sooner, minimize conflicts
 public abstract class MilkBucketItemMixin extends Item implements FluidModificationItem {
 	public MilkBucketItemMixin(Settings settings) {
 		super(settings);

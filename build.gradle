@@ -1,10 +1,6 @@
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAccessibility
-//file:noinspection GradlePackageVersionRange
 plugins {
 	id "fabric-loom" version "1.1.+"
 	id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
-//	id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
 	id "maven-publish"
 }
 
@@ -14,7 +10,7 @@ targetCompatibility = JavaVersion.VERSION_17
 archivesBaseName = project.archives_base_name
 group = project.maven_group
 
-ext.buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 String patch = buildNumber != null ? buildNumber : "99999"
 version = project.mod_version.replace("<build>", patch)
 
@@ -42,14 +38,14 @@ dependencies {
 	modApi(include("io.github.tropheusj:dripstone-fluid-lib:${project.dripstone_fluid_lib_version}"))
 }
 
-task buildOrPublish {
+tasks.register("buildOrPublish") {
 	group = "build"
-	String mavenUser = System.getenv().MAVEN_USER
+	String mavenUser = System.getenv("MAVEN_USER")
 	if (mavenUser != null && !mavenUser.isEmpty()) {
-		dependsOn(tasks.getByName("publish"))
+		dependsOn(tasks.named("publish"))
 		println("prepared for publish")
 	} else {
-		dependsOn(tasks.getByName("build"))
+		dependsOn(tasks.named("build"))
 		println("prepared for build")
 	}
 }
@@ -67,7 +63,9 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach { it.options.release = 17 }
+tasks.withType(JavaCompile).configureEach {
+	it.options.release.set(17)
+}
 
 java {
 	withSourcesJar()
@@ -88,10 +86,10 @@ publishing {
 
 	repositories {
 		maven {
-			url = "https://mvn.devos.one/${System.getenv().PUBLISH_SUFFIX}/"
+			url = "https://mvn.devos.one/${System.getenv("PUBLISH_SUFFIX")}/"
 			credentials {
-				username = System.getenv().MAVEN_USER
-				password = System.getenv().MAVEN_PASS
+				username = System.getenv("MAVEN_USER")
+				password = System.getenv("MAVEN_PASS")
 			}
 			authentication { basic(BasicAuthentication) }
 		}
