@@ -11,7 +11,10 @@
     "EntityMixin",
     "GlassBottleItemMixin",
     "MilkBucketItemMixin",
-    "PotionEntityMixin"
+    "PotionEntityMixin",
+    "pathfinding.BirdPathNodeMakerMixin",
+    "pathfinding.LandPathNodeMakerMixin",
+    "pathfinding.MobNavigationMixin"
   ],
   "client": [
     "BackgroundRendererMixin"

@@ -27,6 +27,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.LeveledCauldronBlock;
@@ -40,7 +41,6 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -259,8 +259,12 @@ public class Milk implements ModInitializer {
 		enableLingeringMilkBottle();
 	}
 
+	public static boolean isMilk(BlockState state) {
+		return isMilk(state.getFluidState());
+	}
+
 	public static boolean isMilk(FluidState state) {
-		return state.isOf(Milk.STILL_MILK) || state.isOf(Milk.FLOWING_MILK);
+		return (STILL_MILK != null && state.isOf(STILL_MILK)) || (FLOWING_MILK != null && state.isOf(FLOWING_MILK));
 	}
 
 	public static boolean isMilkBottle(Item item) {
